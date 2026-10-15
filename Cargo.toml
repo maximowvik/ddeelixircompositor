@@ -1,6 +1,37 @@
 [package]
-name = "ddeelixircompositor"
+name = "deelixir-wm"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+description = "DeElixir Wayland Compositor with custom decorations"
 
 [dependencies]
+# Smithay - основа композитора
+smithay = { version = "0.7.0", features = [
+    "backend_drm",
+    "backend_gbm",
+    "backend_egl",
+    "backend_libinput",
+    "backend_session_libseat",
+    "backend_udev",
+    "backend_winit",
+    "desktop",
+    "wayland_frontend",
+    "xwayland",
+] }
+
+# Wayland протоколы
+wayland-server = "0.31"
+wayland-protocols = { version = "0.32.13", features = ["server"] }
+wayland-protocols-wlr = { version = "0.3.12", features = ["server"] }
+
+# Рендеринг
+wgpu = "30.0.1"
+cosmic-text = "0.19.0"
+
+# Утилиты
+serde = { version = "1.0", features = ["derive"] }
+toml = "1.1.8+spec-1.1.0"
+log = "0.4"
+env_logger = "0.11"
+chrono = "0.4.45"
+render = "0.3.1"
