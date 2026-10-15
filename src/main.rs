@@ -2,6 +2,8 @@ mod state;
 mod handlers;
 mod render;
 mod input;
+mod decorations;
+mod elements;
 
 use std::sync::Arc;
 use smithay::{
@@ -88,7 +90,15 @@ fn run_winit() -> Result<(), Box<dyn std::error::Error>> {
         // и освободили мутабельный заимствование backend перед вызовом submit()
         {
             let (renderer, mut framebuffer) = backend.bind().unwrap();
-            render_frame(renderer, &mut framebuffer, &state.xdg_shell_state, size, &start_time);
+            render_frame(
+                renderer, 
+                &mut framebuffer, 
+                &state.xdg_shell_state, 
+                size, 
+                &start_time,
+                &state.windows,
+                &state.window_positions,
+            );
         }
 
         if let Ok(Some(stream)) = listener.accept() {

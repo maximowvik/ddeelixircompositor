@@ -1,7 +1,8 @@
 use smithay::{
+    desktop::Window,
     backend::renderer::utils::on_commit_buffer_handler,
     input::{pointer::CursorImageStatus, Seat, SeatHandler, SeatState},
-    utils::Serial,
+    utils::{Serial, Point},
     wayland::{
         buffer::BufferHandler,
         compositor::{CompositorClientState, CompositorHandler, CompositorState},
@@ -32,10 +33,20 @@ impl XdgShellHandler for App {
     }
 
     fn new_toplevel(&mut self, surface: ToplevelSurface) {
+        let window = Window::new_wayland_window(surface.clone());
+
+        let position = Point::new(self.next_window_offset, self.next_window_offset);
+        self.windows.push(window.clone());
+        self.window_positions.push(position);
+        self.next_window_offset += 30;
+
         surface.with_pending_state(|state| {
+            state.size = Some((800, 600).into());
             state.states.set(xdg_toplevel::State::Activated);
         });
         surface.send_configure();
+
+        tracing::info!("New window created at {:?}", position);
     }
 
     fn new_popup(&mut self, _surface: PopupSurface, _positioner: PositionerState) {}

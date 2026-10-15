@@ -1,4 +1,5 @@
 use smithay::{
+    desktop::Window,
     wayland::{
         compositor::{CompositorClientState, CompositorState},
         selection::data_device::DataDeviceState,
@@ -6,6 +7,7 @@ use smithay::{
         shm::ShmState,
     },
     input::{Seat, SeatState},
+    utils::Point,
 };
 use wayland_server::{
     backend::{ClientData, ClientId, DisconnectReason}
@@ -33,6 +35,9 @@ pub struct App {
     pub seat_state: SeatState<Self>,
     pub data_device_state: DataDeviceState,
     pub seat: Seat<Self>,
+    pub windows: Vec<Window>,
+    pub window_positions: Vec<Point<i32, smithay::utils::Logical>>,
+    pub next_window_offset: i32,
 }
 
 impl App {
@@ -51,6 +56,9 @@ impl App {
             seat_state,
             data_device_state,
             seat,
+            windows: Vec::new(),
+            window_positions: Vec::new(),
+            next_window_offset: 30,
         }
     }
 }
